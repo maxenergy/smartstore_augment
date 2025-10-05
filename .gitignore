@@ -1,6 +1,12 @@
 # Memory Bank (keep private)
 /memory-bank/
 
+# Database
+*.db
+*.db-journal
+/prisma/*.db
+/prisma/*.db-journal
+
 # Dependencies
 node_modules/
 /.pnp
