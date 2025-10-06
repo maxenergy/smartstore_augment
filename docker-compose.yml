@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Next.js 应用
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smartstore-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:./prisma/prod.db
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+    volumes:
+      - ./prisma:/app/prisma
+      - app-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - smartstore-network
+
+  # PostgreSQL 数据库（可选，用于生产环境）
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: smartstore-db
+  #   environment:
+  #     - POSTGRES_USER=smartstore
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD}
+  #     - POSTGRES_DB=smartstore
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   restart: unless-stopped
+  #   networks:
+  #     - smartstore-network
+
+  # Redis 缓存（可选）
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: smartstore-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis-data:/data
+  #   restart: unless-stopped
+  #   networks:
+  #     - smartstore-network
+
+volumes:
+  app-data:
+  # postgres-data:
+  # redis-data:
+
+networks:
+  smartstore-network:
+    driver: bridge
+
