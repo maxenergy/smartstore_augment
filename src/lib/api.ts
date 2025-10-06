@@ -169,11 +169,23 @@ export const platformProductsApi = {
   delete: (id: string) => apiClient.delete<ApiResponse<null>>(`/platform-products/${id}`),
 };
 
+// 同步 API
+export const syncApi = {
+  syncInventory: (data: any) => apiClient.post<ApiResponse<any>>("/sync/inventory", data),
+  syncPrices: (data: any) => apiClient.post<ApiResponse<any>>("/sync/prices", data),
+  getLogs: (params?: any) =>
+    apiClient.get<ApiResponse<PaginatedResponse<any>>>("/sync/logs", {
+      params,
+    }),
+  getStats: () => apiClient.get<ApiResponse<any>>("/sync/stats"),
+};
+
 export const api = {
   users: usersApi,
   shops: shopsApi,
   products: productsApi,
   orders: ordersApi,
   platformProducts: platformProductsApi,
+  sync: syncApi,
   auth: authApi,
 };

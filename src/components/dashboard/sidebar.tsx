@@ -8,13 +8,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui.store";
-import { LayoutDashboard, Package, Store, ShoppingCart, Users, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  Package,
+  Store,
+  ShoppingCart,
+  Users,
+  Settings,
+  Layers,
+  RefreshCw,
+} from "lucide-react";
 
 const navigation = [
   { name: "仪表板", href: "/dashboard", icon: LayoutDashboard },
   { name: "产品管理", href: "/dashboard/products", icon: Package },
   { name: "店铺管理", href: "/dashboard/shops", icon: Store },
   { name: "订单管理", href: "/dashboard/orders", icon: ShoppingCart },
+  { name: "平台产品", href: "/dashboard/platform-products", icon: Layers },
+  { name: "数据同步", href: "/dashboard/sync", icon: RefreshCw },
   { name: "用户管理", href: "/dashboard/users", icon: Users },
   { name: "设置", href: "/dashboard/settings", icon: Settings },
 ];
