@@ -10,3 +10,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================
+// 枚举类型定义
+// ============================================
+
+/// 用户角色枚举
+enum UserRole {
+  ADMIN // 管理员 - 拥有系统最高权限
+  MERCHANT // 商家 - 普通商家用户
+  API_USER // API用户 - 仅通过API访问的用户
+}
+
+/// 用户状态枚举
+enum UserStatus {
+  ACTIVE // 活跃 - 正常使用中
+  INACTIVE // 未激活 - 注册后未激活邮箱
+  SUSPENDED // 已暂停 - 账号被管理员暂停
+}
+
+// ============================================
+// 数据模型定义
+// ============================================
+
+/// 用户表模型
+/// 存储系统用户的基本信息、认证信息和状态
+model User {
+  id            String     @id @default(cuid())
+  email         String     @unique
+  password      String // bcrypt 加密后的密码
+  name          String? // 用户姓名（可选）
+  role          UserRole   @default(MERCHANT)
+  status        UserStatus @default(ACTIVE)
+  emailVerified DateTime? // 邮箱验证时间
+  image         String? // 用户头像URL（可选）
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // 关系字段（后续添加）
+  // shops         Shop[]
+  // products      Product[]
+  // orders        Order[]
+
+  @@map("users")
+}
