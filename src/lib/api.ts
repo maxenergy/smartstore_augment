@@ -144,9 +144,20 @@ export const authApi = {
 /**
  * 统一导出 API 对象
  */
+// 订单 API
+export const ordersApi = {
+  list: (params?: any) => apiClient.get<ApiResponse<PaginatedResponse<any>>>("/orders", { params }),
+  get: (id: string) => apiClient.get<ApiResponse<any>>(`/orders/${id}`),
+  create: (data: any) => apiClient.post<ApiResponse<any>>("/orders", data),
+  update: (id: string, data: any) => apiClient.put<ApiResponse<any>>(`/orders/${id}`, data),
+  updateStatus: (id: string, status: string) =>
+    apiClient.patch<ApiResponse<any>>(`/orders/${id}/status`, { status }),
+};
+
 export const api = {
   users: usersApi,
   shops: shopsApi,
   products: productsApi,
+  orders: ordersApi,
   auth: authApi,
 };
