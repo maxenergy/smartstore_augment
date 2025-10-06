@@ -89,6 +89,7 @@ model User {
   shops    Shop[]
   products Product[]
   orders   Order[]
+  syncLogs SyncLog[]
 
   @@map("users")
 }
@@ -212,4 +213,27 @@ model Order {
   @@index([status]) // 优化状态筛选
   @@index([createdAt]) // 优化时间排序
   @@map("orders")
+}
+
+/// 同步日志表模型
+/// 记录数据同步操作的历史
+model SyncLog {
+  id         String   @id @default(cuid())
+  syncType   String // 同步类型：INVENTORY, PRICE, ORDER
+  entityType String // 实体类型：PRODUCT, PLATFORM_PRODUCT, ORDER
+  entityId   String // 实体ID
+  status     String // 同步状态：SUCCESS, FAILED, PENDING
+  message    String? // 同步消息或错误信息
+  userId     String // 操作用户ID
+  syncedAt   DateTime @default(now())
+
+  // 关系字段
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 索引
+  @@index([userId])
+  @@index([syncType])
+  @@index([status])
+  @@index([syncedAt])
+  @@map("sync_logs")
 }
