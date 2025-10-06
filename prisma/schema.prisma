@@ -28,6 +28,21 @@ enum UserStatus {
   SUSPENDED // 已暂停 - 账号被管理员暂停
 }
 
+/// 平台枚举
+enum Platform {
+  AMAZON // 亚马逊
+  TIKTOK // TikTok Shop
+  SHOPIFY // Shopify
+  EBAY // eBay
+}
+
+/// 店铺状态枚举
+enum ShopStatus {
+  ACTIVE // 活跃 - 正常使用中
+  INACTIVE // 未激活 - 店铺未激活
+  EXPIRED // 已过期 - 授权令牌已过期
+}
+
 // ============================================
 // 数据模型定义
 // ============================================
@@ -46,10 +61,37 @@ model User {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
-  // 关系字段（后续添加）
-  // shops         Shop[]
+  // 关系字段
+  shops Shop[]
   // products      Product[]
   // orders        Order[]
 
   @@map("users")
+}
+
+/// 店铺表模型
+/// 存储用户在各个电商平台的店铺信息和授权令牌
+model Shop {
+  id             String     @id @default(cuid())
+  userId         String
+  platform       Platform
+  shopName       String // 店铺名称
+  shopId         String // 平台店铺ID
+  accessToken    String // 平台访问令牌
+  refreshToken   String? // 平台刷新令牌（可选）
+  tokenExpiresAt DateTime? // 令牌过期时间（可选）
+  status         ShopStatus @default(ACTIVE)
+  config         String? // JSON格式的店铺配置（可选）
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // 关系字段
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // platformProducts PlatformProduct[]
+  // orders           Order[]
+
+  // 索引和约束
+  @@unique([userId, platform, shopId]) // 防止重复添加同一店铺
+  @@index([userId]) // 优化用户店铺查询
+  @@map("shops")
 }
