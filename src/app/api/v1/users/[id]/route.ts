@@ -22,19 +22,25 @@ import { ForbiddenError } from "@/lib/errors";
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // 验证用户登录
-    const currentUser = await requireAuth(request);
+    const authResult = await requireAuth(request);
+    if (authResult.error) {
+      return authResult.error;
+    }
 
     // 验证路径参数
-    const { id } = await validatePathParams(params, userIdSchema);
+    const { id } = validatePathParams(params, userIdSchema);
 
     // 权限检查：管理员或本人
-    await requireOwnerOrAdmin(request, id);
+    const ownerCheckResult = await requireOwnerOrAdmin(request, id);
+    if (ownerCheckResult && ownerCheckResult.error) {
+      return ownerCheckResult.error;
+    }
 
     // 获取用户详情
     const user = await userService.getUserById(id);
 
     // 返回成功响应
-    return successResponse(user, "获取用户详情成功");
+    return successResponse(user);
   } catch (error) {
     return handleError(error);
   }
@@ -48,10 +54,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // 验证用户登录
-    const currentUser = await requireAuth(request);
+    const authResult = await requireAuth(request);
+    if (authResult.error) {
+      return authResult.error;
+    }
+    const currentUser = authResult.session.user;
 
     // 验证路径参数
-    const { id } = await validatePathParams(params, userIdSchema);
+    const { id } = validatePathParams(params, userIdSchema);
 
     // 验证请求体
     const updateData = await validateRequestBody(request, updateUserSchema);
@@ -78,7 +88,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const user = await userService.updateUser(id, updateData);
 
     // 返回成功响应
-    return successResponse(user, "更新用户信息成功");
+    return successResponse(user);
   } catch (error) {
     return handleError(error);
   }
@@ -92,10 +102,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // 验证管理员权限
-    const currentUser = await requireAdmin(request);
+    const adminResult = await requireAdmin(request);
+    if (adminResult.error) {
+      return adminResult.error;
+    }
+    const currentUser = adminResult.session.user;
 
     // 验证路径参数
-    const { id } = await validatePathParams(params, userIdSchema);
+    const { id } = validatePathParams(params, userIdSchema);
 
     // 防止删除自己
     if (currentUser.id === id) {
@@ -106,7 +120,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     await userService.deleteUser(id);
 
     // 返回成功响应
-    return successResponse(null, "删除用户成功");
+    return successResponse(null);
   } catch (error) {
     return handleError(error);
   }

@@ -20,186 +20,191 @@
 - [ ] 实现平台产品关联表（platform_products）数据模型
 - [ ] 实现订单表（orders）数据模型
 - [ ] 创建数据库迁移脚本
-- [ ] 配置数据库连接池和连接管理
+      | 变量名 | 说明 | 默认值 | 必填 |
+      | -------------------------- | -------------------------------------- | --------------------- | ---- |
+      | `NODE_ENV` | 应用环境 (development/production/test) | development | 是 |
+      | `NEXT_PUBLIC_APP_URL` | 应用访问URL | http://localhost:3000 | 是 |
+      | `NEXT_PUBLIC_API_BASE_URL` | API基础路径 | /api/v1 | 是 |
 
-### 1.3 用户认证与授权系统
+### 数据库配置
 
-- [ ] 实现JWT Token认证机制
-- [ ] 开发用户注册API（/api/v1/auth/register）
-- [ ] 开发用户登录API（/api/v1/auth/login）
-- [ ] 开发用户登出API（/api/v1/auth/logout）
-- [ ] 实现密码加密和验证逻辑
-- [ ] 开发Token刷新机制
-- [ ] 实现RBAC权限控制系统
-- [ ] 开发中间件进行路由保护
+| 变量名         | 说明             | 示例                                                                                | 必填 |
+| -------------- | ---------------- | ----------------------------------------------------------------------------------- | ---- |
+| `DATABASE_URL` | 数据库连接字符串 | `file:./dev.db` (SQLite)<br>`postgresql://user:pass@localhost:5432/db` (PostgreSQL) | 是   |
 
-### 1.4 基础API框架
+### 认证配置
 
-- [ ] 配置API路由基础结构
-- [ ] 实现统一的响应格式封装
-- [ ] 开发全局错误处理中间件
-- [ ] 实现API请求验证（Zod schema）
-- [ ] 配置API文档（Swagger/OpenAPI）
-- [ ] 实现API版本控制机制
+| 变量名            | 说明                | 生成方法                  | 必填 |
+| ----------------- | ------------------- | ------------------------- | ---- |
+| `NEXTAUTH_SECRET` | NextAuth.js 密钥    | `openssl rand -base64 32` | 是   |
+| `NEXTAUTH_URL`    | NextAuth.js 回调URL | http://localhost:3000     | 是   |
+| `JWT_EXPIRATION`  | JWT 过期时间 (秒)   | 2592000 (30天)            | 否   |
 
-## 第二阶段：核心功能开发（预计6-8周）
+### 第三方平台 API
 
-### 2.1 用户管理模块
+#### Amazon Selling Partner API
 
-- [ ] 开发用户列表查询API（/api/v1/users）
-- [ ] 开发用户详情获取API（/api/v1/users/{id}）
-- [ ] 开发用户信息更新API（/api/v1/users/{id}）
-- [ ] 开发用户状态管理API（启用/禁用）
-- [ ] 实现用户角色权限分配功能
-- [ ] 开发用户操作日志记录功能
+| 变量名                  | 说明              | 必填 |
+| ----------------------- | ----------------- | ---- |
+| `AMAZON_CLIENT_ID`      | Amazon 客户端ID   | 否   |
+| `AMAZON_CLIENT_SECRET`  | Amazon 客户端密钥 | 否   |
+| `AMAZON_REFRESH_TOKEN`  | Amazon 刷新令牌   | 否   |
+| `AMAZON_REGION`         | Amazon 区域       | 否   |
+| `AMAZON_MARKETPLACE_ID` | Amazon 市场ID     | 否   |
 
-### 2.2 店铺管理模块
+#### TikTok Shop API
 
-- [ ] 开发店铺列表获取API（/api/v1/shops）
-- [ ] 开发店铺添加API（/api/v1/shops）
-- [ ] 开发店铺信息更新API（/api/v1/shops/{id}）
-- [ ] 开发店铺删除API（/api/v1/shops/{id}）
-- [ ] 实现店铺状态管理功能
-- [ ] 开发店铺数据同步API（/api/v1/shops/{id}/sync）
-- [ ] 实现多平台店铺配置管理
+| 变量名                | 说明            | 必填 |
+| --------------------- | --------------- | ---- |
+| `TIKTOK_APP_KEY`      | TikTok 应用密钥 | 否   |
+| `TIKTOK_APP_SECRET`   | TikTok 应用密钥 | 否   |
+| `TIKTOK_ACCESS_TOKEN` | TikTok 访问令牌 | 否   |
+| `TIKTOK_SHOP_ID`      | TikTok 店铺ID   | 否   |
 
-### 2.3 产品管理模块
+#### Shopify API
 
-- [ ] 开发产品列表查询API（/api/v1/products）
-- [ ] 开发产品详情获取API（/api/v1/products/{id}）
-- [ ] 开发产品创建API（/api/v1/products）
-- [ ] 开发产品更新API（/api/v1/products/{id}）
-- [ ] 开发产品删除API（/api/v1/products/{id}）
-- [ ] 实现产品状态管理（草稿/发布/归档）
-- [ ] 开发产品图片上传和处理功能
-- [ ] 实现产品分类标签管理
+| 变量名                 | 说明             | 必填 |
+| ---------------------- | ---------------- | ---- |
+| `SHOPIFY_API_KEY`      | Shopify API密钥  | 否   |
+| `SHOPIFY_API_SECRET`   | Shopify API密钥  | 否   |
+| `SHOPIFY_ACCESS_TOKEN` | Shopify 访问令牌 | 否   |
+| `SHOPIFY_SHOP_DOMAIN`  | Shopify 店铺域名 | 否   |
 
-### 2.4 基础前端界面
+#### eBay API
 
-- [ ] 配置Next.js前端项目结构
-- [ ] 集成shadcn/ui组件库
-- [ ] 配置Tailwind CSS样式框架
-- [ ] 实现用户登录/注册页面
-- [ ] 开发主控制台仪表板
-- [ ] 实现用户管理界面
-- [ ] 开发店铺管理界面
-- [ ] 实现产品管理界面
+| 变量名               | 说明                           | 必填 |
+| -------------------- | ------------------------------ | ---- |
+| `EBAY_CLIENT_ID`     | eBay 客户端ID                  | 否   |
+| `EBAY_CLIENT_SECRET` | eBay 客户端密钥                | 否   |
+| `EBAY_REFRESH_TOKEN` | eBay 刷新令牌                  | 否   |
+| `EBAY_ENVIRONMENT`   | eBay 环境 (SANDBOX/PRODUCTION) | 否   |
 
-## 第三阶段：选品与分销功能（预计8-10周）
+### Redis 配置 (可选)
 
-### 3.1 选品中心模块
+| 变量名           | 说明             | 默认值                 | 必填 |
+| ---------------- | ---------------- | ---------------------- | ---- |
+| `REDIS_URL`      | Redis 连接URL    | redis://localhost:6379 | 否   |
+| `REDIS_PASSWORD` | Redis 密码       | -                      | 否   |
+| `REDIS_DB`       | Redis 数据库编号 | 0                      | 否   |
 
-- [ ] 开发产品搜索API（/api/v1/products/search）
-- [ ] 集成亚马逊产品搜索API
-- [ ] 开发热门产品获取API（/api/v1/products/trending）
-- [ ] 实现智能筛选功能（评分、销量、价格）
-- [ ] 开发产品趋势分析功能
-- [ ] 实现竞品分析功能
-- [ ] 开发价格监控功能
-- [ ] 实现产品导入历史记录（/api/v1/products/import/history）
+### 文件存储配置
 
-### 3.2 产品导入功能
+| 变量名                  | 说明           | 默认值           | 必填 |
+| ----------------------- | -------------- | ---------------- | ---- |
+| `UPLOAD_DIR`            | 本地上传目录   | ./public/uploads | 否   |
+| `AWS_ACCESS_KEY_ID`     | AWS 访问密钥ID | -                | 否   |
+| `AWS_SECRET_ACCESS_KEY` | AWS 访问密钥   | -                | 否   |
+| `AWS_REGION`            | AWS 区域       | us-east-1        | 否   |
+| `AWS_S3_BUCKET`         | S3 存储桶名称  | -                | 否   |
 
-- [ ] 开发产品导入API（/api/v1/products/import）
-- [ ] 实现一键导入功能逻辑
-- [ ] 开发产品信息自动补全功能
-- [ ] 实现AI产品描述生成功能
-- [ ] 开发产品图片批量处理功能
-- [ ] 实现产品数据清洗和标准化
+### 邮件服务配置 (可选)
 
-### 3.3 多平台分销模块
+| 变量名          | 说明        | 示例                   | 必填 |
+| --------------- | ----------- | ---------------------- | ---- |
+| `SMTP_HOST`     | SMTP 服务器 | smtp.gmail.com         | 否   |
+| `SMTP_PORT`     | SMTP 端口   | 587                    | 否   |
+| `SMTP_USER`     | SMTP 用户名 | your-email@gmail.com   | 否   |
+| `SMTP_PASSWORD` | SMTP 密码   | -                      | 否   |
+| `SMTP_FROM`     | 发件人地址  | noreply@smartstore.com | 否   |
 
-- [ ] 开发分销发布API（/api/v1/distribute/publish）
-- [ ] 开发批量发布API（/api/v1/distribute/batch）
-- [ ] 实现发布状态查询API（/api/v1/distribute/status）
-- [ ] 开发发布信息更新API（/api/v1/distribute/{id}）
-- [ ] 集成亚马逊MWS API对接
-- [ ] 集成TikTok Shop API对接
-- [ ] 实现多平台库存同步机制
-- [ ] 开发智能定价策略功能
+### 日志配置
 
-### 3.4 订单管理功能
+| 变量名          | 说明         | 默认值 | 必填 |
+| --------------- | ------------ | ------ | ---- |
+| `LOG_LEVEL`     | 日志级别     | info   | 否   |
+| `LOG_FILE_PATH` | 日志文件路径 | ./logs | 否   |
 
-- [ ] 开发订单列表查询API（/api/v1/orders）
-- [ ] 开发订单详情获取API（/api/v1/orders/{id}）
-- [ ] 实现订单状态管理功能
-- [ ] 开发多平台订单同步功能
-- [ ] 实现订单数据聚合分析
-- [ ] 开发订单导出功能
+### 安全配置
 
-## 第四阶段：数据分析与智能化（预计6-8周）
+| 变量名                 | 说明                     | 默认值 | 必填 |
+| ---------------------- | ------------------------ | ------ | ---- |
+| `CORS_ORIGINS`         | CORS 允许的源 (逗号分隔) | -      | 否   |
+| `RATE_LIMIT_MAX`       | API 速率限制 (请求/分钟) | 100    | 否   |
+| `RATE_LIMIT_WINDOW_MS` | 速率限制时间窗口 (毫秒)  | 60000  | 否   |
 
-### 4.1 数据分析模块
+### 功能开关
 
-- [ ] 开发销售数据分析API
-- [ ] 实现多维度数据报表功能
-- [ ] 开发利润分析计算功能
-- [ ] 实现用户画像分析功能
-- [ ] 开发市场趋势报告功能
-- [ ] 实现竞品监控功能
-- [ ] 集成Recharts图表库
-- [ ] 开发数据可视化仪表板
+| 变量名                      | 说明           | 默认值 | 必填 |
+| --------------------------- | -------------- | ------ | ---- |
+| `ENABLE_REGISTRATION`       | 启用用户注册   | true   | 否   |
+| `ENABLE_EMAIL_VERIFICATION` | 启用邮箱验证   | false  | 否   |
+| `ENABLE_TWO_FACTOR_AUTH`    | 启用双因素认证 | false  | 否   |
 
-### 4.2 AI智能功能
+### 开发工具
 
-- [ ] 集成z-ai-web-dev-sdk服务
-- [ ] 开发AI产品描述生成功能
-- [ ] 实现智能选品推荐算法
-- [ ] 开发价格优化建议功能
-- [ ] 实现销售预测分析功能
-- [ ] 开发智能库存预警功能
+| 变量名            | 说明          | 默认值 | 必填 |
+| ----------------- | ------------- | ------ | ---- |
+| `DEBUG`           | 启用调试模式  | false  | 否   |
+| `ENABLE_API_DOCS` | 启用 API 文档 | true   | 否   |
 
-### 4.3 高级前端功能
+## 🔒 安全最佳实践
 
-- [ ] 开发数据可视化图表组件
-- [ ] 实现响应式数据仪表板
-- [ ] 开发高级筛选和搜索功能
-- [ ] 实现实时数据更新机制
-- [ ] 开发数据导出和报告生成功能
+1. **永远不要提交 `.env.local` 到 Git**
+   - 已在 `.gitignore` 中配置
 
-## 第五阶段：系统优化与扩展（预计4-6周）
+2. **生产环境必须使用强密钥**
 
-### 5.1 性能优化
+   ```bash
 
-- [ ] 配置Redis缓存系统
-- [ ] 实现数据库查询优化
-- [ ] 开发接口响应缓存机制
-- [ ] 实现静态资源CDN加速
-- [ ] 优化前端打包和加载性能
-- [ ] 实现图片懒加载和压缩
+   ```
 
-### 5.2 安全加固
+# 生成安全的 NEXTAUTH_SECRET
 
-- [ ] 实现API访问限流机制
-- [ ] 开发敏感数据加密存储
-- [ ] 实现HTTPS强制加密
-- [ ] 开发操作日志审计功能
-- [ ] 实现数据脱敏功能
-- [ ] 配置安全Headers和CORS
+openssl rand -base64 32
 
-### 5.3 监控运维
+```
 
-- [ ] 集成应用性能监控（APM）
-- [ ] 实现数据库性能监控
-- [ ] 开发服务器资源监控
-- [ ] 实现业务指标监控
-- [ ] 配置结构化日志记录
-- [ ] 开发错误告警机制
+3. **定期轮换 API 密钥和令牌**
 
-### 5.4 移动端适配
+4. **使用环境变量管理服务**
+   - 生产环境推荐使用 Vercel、AWS Secrets Manager 等
 
-- [ ] 开发移动端响应式界面
-- [ ] 实现PWA渐进式Web应用
-- [ ] 优化移动端用户体验
-- [ ] 开发移动端专属功能
+## 📚 不同环境的配置
 
-## 第六阶段：测试与部署（预计3-4周）
+### 开发环境 (`.env.local`)
 
-### 6.1 测试阶段
+- 使用 SQLite 数据库
+- 启用调试模式
+- 使用本地文件存储
 
-- [ ] 编写单元测试用例
-- [ ] 实现API接口测试
-- [ ] 开发集成测试脚本
+### 测试环境 (`.env.test`)
+
+- 使用独立的测试数据库
+- 禁用外部 API 调用
+- 使用模拟数据
+
+### 生产环境 (`.env.production`)
+
+- 使用 PostgreSQL 数据库
+- 启用所有安全特性
+- 使用 S3 文件存储
+- 配置 Redis 缓存
+
+## 🆘 故障排除
+
+### 问题：环境变量未生效
+
+**解决方案：**
+
+1. 确认文件名为 `.env.local`
+2. 重启开发服务器 (`pnpm dev`)
+3. 检查变量名拼写是否正确
+
+### 问题：数据库连接失败
+
+**解决方案：**
+
+1. 检查 `DATABASE_URL` 格式是否正确
+2. 确认数据库服务已启动
+3. 验证数据库凭据
+
+## 📞 获取帮助
+
+如有问题，请查看：
+
+- [Next.js 环境变量文档](https://nextjs.org/docs/basic-features/environment-variables)
+- [Prisma 连接字符串文档](https://www.prisma.io/docs/reference/database-reference/connection-urls)
+- [NextAuth.js 配置文档](https://next-auth.js.org/configuration/options)
 - [ ] 进行性能压力测试
 - [ ] 执行安全漏洞扫描
 - [ ] 进行用户体验测试
@@ -252,3 +257,4 @@
 2. **Beta版本**（第16周）：完成选品和分销核心功能
 3. **正式版本**（第24周）：完成数据分析和系统优化
 4. **商业化版本**（第32周）：完成所有功能和部署上线
+```

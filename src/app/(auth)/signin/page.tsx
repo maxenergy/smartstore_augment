@@ -78,7 +78,7 @@ export default function SignInPage() {
         router.push("/dashboard");
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError("登录失败，请稍后重试");
     } finally {
       setIsLoading(false);
