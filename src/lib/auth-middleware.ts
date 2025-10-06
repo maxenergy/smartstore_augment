@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { ApiErrors } from "@/lib/api-response";
 import { UserRole, UserStatus } from "@/types/auth";
+import { Permission, hasPermission } from "@/lib/permissions";
 
 /**
  * 认证中间件 - 验证用户是否已登录
@@ -200,4 +201,103 @@ export function canModifyUserResource(
  */
 export function canDeleteUserResource(currentUserRole: UserRole): boolean {
   return currentUserRole === UserRole.ADMIN;
+}
+
+/**
+ * 权限验证中间件 - 验证用户是否具有指定权限
+ *
+ * @description 检查用户是否具有指定的权限
+ * @param permission 要检查的权限
+ * @returns Session 对象或错误响应
+ */
+export async function requirePermission(request: NextRequest, permission: Permission) {
+  // 首先验证用户是否已登录
+  const authResult = await requireAuth(request);
+
+  if (authResult.error) {
+    return authResult;
+  }
+
+  const session = authResult.session!;
+
+  // 检查用户权限
+  if (!hasPermission(session.user.role, permission)) {
+    return {
+      error: ApiErrors.FORBIDDEN("没有权限执行此操作"),
+      session: null,
+    };
+  }
+
+  return {
+    error: null,
+    session,
+  };
+}
+
+/**
+ * 多权限验证中间件 - 验证用户是否具有任意一个指定权限
+ *
+ * @description 检查用户是否具有任意一个指定的权限
+ * @param permissions 要检查的权限列表
+ * @returns Session 对象或错误响应
+ */
+export async function requireAnyPermission(request: NextRequest, permissions: Permission[]) {
+  // 首先验证用户是否已登录
+  const authResult = await requireAuth(request);
+
+  if (authResult.error) {
+    return authResult;
+  }
+
+  const session = authResult.session!;
+
+  // 检查用户是否拥有任意一个权限
+  const hasAnyPerm = permissions.some((permission) => hasPermission(session.user.role, permission));
+
+  if (!hasAnyPerm) {
+    return {
+      error: ApiErrors.FORBIDDEN("没有权限执行此操作"),
+      session: null,
+    };
+  }
+
+  return {
+    error: null,
+    session,
+  };
+}
+
+/**
+ * 多权限验证中间件 - 验证用户是否具有所有指定权限
+ *
+ * @description 检查用户是否具有所有指定的权限
+ * @param permissions 要检查的权限列表
+ * @returns Session 对象或错误响应
+ */
+export async function requireAllPermissions(request: NextRequest, permissions: Permission[]) {
+  // 首先验证用户是否已登录
+  const authResult = await requireAuth(request);
+
+  if (authResult.error) {
+    return authResult;
+  }
+
+  const session = authResult.session!;
+
+  // 检查用户是否拥有所有权限
+  const hasAllPerms = permissions.every((permission) =>
+    hasPermission(session.user.role, permission)
+  );
+
+  if (!hasAllPerms) {
+    return {
+      error: ApiErrors.FORBIDDEN("没有权限执行此操作"),
+      session: null,
+    };
+  }
+
+  return {
+    error: null,
+    session,
+  };
 }
