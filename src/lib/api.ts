@@ -154,10 +154,26 @@ export const ordersApi = {
     apiClient.patch<ApiResponse<any>>(`/orders/${id}/status`, { status }),
 };
 
+// 平台产品 API
+export const platformProductsApi = {
+  list: (params?: any) =>
+    apiClient.get<ApiResponse<PaginatedResponse<any>>>("/platform-products", {
+      params,
+    }),
+  distribute: (productId: string, data: any) =>
+    apiClient.post<ApiResponse<any>>(`/products/${productId}/distribute`, data),
+  updateInventory: (id: string, inventory: number) =>
+    apiClient.patch<ApiResponse<any>>(`/platform-products/${id}/inventory`, {
+      inventory,
+    }),
+  delete: (id: string) => apiClient.delete<ApiResponse<null>>(`/platform-products/${id}`),
+};
+
 export const api = {
   users: usersApi,
   shops: shopsApi,
   products: productsApi,
   orders: ordersApi,
+  platformProducts: platformProductsApi,
   auth: authApi,
 };
