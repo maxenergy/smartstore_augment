@@ -152,6 +152,7 @@ export const ApiErrors = {
 
 /**
  * 处理 API 错误
+ * @deprecated 请使用 src/lib/error-handler.ts 中的 handleError 函数
  */
 export function handleApiError(error: unknown): NextResponse<ApiResponse> {
   console.error("API Error:", error);
