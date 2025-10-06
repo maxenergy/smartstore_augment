@@ -50,6 +50,13 @@ enum ProductStatus {
   DELETED // 已删除 - 产品已删除
 }
 
+/// 平台产品状态枚举
+enum PlatformProductStatus {
+  ACTIVE // 活跃 - 正常销售中
+  INACTIVE // 未激活 - 未上架
+  OUT_OF_STOCK // 缺货 - 库存不足
+}
+
 // ============================================
 // 数据模型定义
 // ============================================
@@ -93,8 +100,8 @@ model Shop {
   updatedAt      DateTime   @updatedAt
 
   // 关系字段
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // platformProducts PlatformProduct[]
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platformProducts PlatformProduct[]
   // orders           Order[]
 
   // 索引和约束
@@ -125,12 +132,39 @@ model Product {
   updatedAt       DateTime      @updatedAt
 
   // 关系字段
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // platformProducts PlatformProduct[]
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platformProducts PlatformProduct[]
 
   // 索引和约束
   @@unique([sourcePlatform, sourceProductId]) // 防止重复导入同一产品
   @@index([userId]) // 优化用户产品查询
   @@index([status]) // 优化状态筛选
   @@map("products")
+}
+
+/// 平台产品关联表模型
+/// 存储产品在各个店铺的销售信息（价格、库存、状态等）
+model PlatformProduct {
+  id                String                @id @default(cuid())
+  productId         String
+  shopId            String
+  platformProductId String // 平台上的产品ID
+  platform          Platform // 销售平台
+  price             Float // 在该平台的销售价格
+  inventory         Int // 库存数量
+  status            PlatformProductStatus @default(ACTIVE)
+  syncedAt          DateTime? // 最后同步时间（可选）
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+
+  // 关系字段
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  shop    Shop    @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  // 索引和约束
+  @@unique([productId, shopId]) // 防止同一产品在同一店铺重复添加
+  @@index([productId]) // 优化产品关联查询
+  @@index([shopId]) // 优化店铺产品查询
+  @@index([status]) // 优化状态筛选
+  @@map("platform_products")
 }
