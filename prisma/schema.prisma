@@ -43,6 +43,13 @@ enum ShopStatus {
   EXPIRED // 已过期 - 授权令牌已过期
 }
 
+/// 产品状态枚举
+enum ProductStatus {
+  ACTIVE // 活跃 - 正常使用中
+  INACTIVE // 未激活 - 产品未激活
+  DELETED // 已删除 - 产品已删除
+}
+
 // ============================================
 // 数据模型定义
 // ============================================
@@ -62,8 +69,8 @@ model User {
   updatedAt     DateTime   @updatedAt
 
   // 关系字段
-  shops Shop[]
-  // products      Product[]
+  shops    Shop[]
+  products Product[]
   // orders        Order[]
 
   @@map("users")
@@ -94,4 +101,36 @@ model Shop {
   @@unique([userId, platform, shopId]) // 防止重复添加同一店铺
   @@index([userId]) // 优化用户店铺查询
   @@map("shops")
+}
+
+/// 产品表模型
+/// 存储从各个平台导入的产品信息
+model Product {
+  id              String        @id @default(cuid())
+  userId          String
+  sourcePlatform  Platform // 产品来源平台
+  sourceProductId String // 源平台产品ID
+  title           String // 产品标题
+  description     String? // 产品描述（可选）
+  price           Float // 产品价格
+  currency        String        @default("USD") // 货币代码（如 USD, CNY）
+  images          String // JSON数组格式的图片URL列表
+  specifications  String? // JSON格式的产品规格（可选）
+  category        String? // 产品分类（可选）
+  tags            String? // JSON数组格式的标签列表（可选）
+  rating          Float? // 产品评分（可选）
+  reviewCount     Int? // 评论数量（可选）
+  status          ProductStatus @default(ACTIVE)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // 关系字段
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // platformProducts PlatformProduct[]
+
+  // 索引和约束
+  @@unique([sourcePlatform, sourceProductId]) // 防止重复导入同一产品
+  @@index([userId]) // 优化用户产品查询
+  @@index([status]) // 优化状态筛选
+  @@map("products")
 }
