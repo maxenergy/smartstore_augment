@@ -57,6 +57,16 @@ enum PlatformProductStatus {
   OUT_OF_STOCK // 缺货 - 库存不足
 }
 
+/// 订单状态枚举
+enum OrderStatus {
+  PENDING // 待支付 - 订单已创建，等待支付
+  PAID // 已支付 - 订单已支付
+  SHIPPED // 已发货 - 订单已发货
+  DELIVERED // 已送达 - 订单已送达
+  CANCELLED // 已取消 - 订单已取消
+  REFUNDED // 已退款 - 订单已退款
+}
+
 // ============================================
 // 数据模型定义
 // ============================================
@@ -78,7 +88,7 @@ model User {
   // 关系字段
   shops    Shop[]
   products Product[]
-  // orders        Order[]
+  orders   Order[]
 
   @@map("users")
 }
@@ -102,7 +112,7 @@ model Shop {
   // 关系字段
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   platformProducts PlatformProduct[]
-  // orders           Order[]
+  orders           Order[]
 
   // 索引和约束
   @@unique([userId, platform, shopId]) // 防止重复添加同一店铺
@@ -167,4 +177,39 @@ model PlatformProduct {
   @@index([shopId]) // 优化店铺产品查询
   @@index([status]) // 优化状态筛选
   @@map("platform_products")
+}
+
+/// 订单表模型
+/// 存储来自各个平台的订单信息
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique // 订单编号（唯一）
+  userId          String
+  shopId          String
+  platform        Platform // 订单来源平台
+  totalAmount     Float // 订单总金额
+  currency        String      @default("USD") // 货币代码（如 USD, CNY）
+  status          OrderStatus @default(PENDING)
+  customerName    String // 客户姓名
+  customerEmail   String? // 客户邮箱（可选）
+  customerPhone   String? // 客户电话（可选）
+  shippingAddress String // JSON格式的收货地址
+  items           String // JSON数组格式的订单项列表
+  notes           String? // 订单备注（可选）
+  paidAt          DateTime? // 支付时间（可选）
+  shippedAt       DateTime? // 发货时间（可选）
+  deliveredAt     DateTime? // 送达时间（可选）
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // 关系字段
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  // 索引和约束
+  @@index([userId]) // 优化用户订单查询
+  @@index([shopId]) // 优化店铺订单查询
+  @@index([status]) // 优化状态筛选
+  @@index([createdAt]) // 优化时间排序
+  @@map("orders")
 }
