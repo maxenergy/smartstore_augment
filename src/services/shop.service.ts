@@ -69,10 +69,9 @@ export class ShopService {
         take: pageSize,
         select: {
           id: true,
-          name: true,
+          shopName: true,
+          shopId: true,
           platform: true,
-          platformShopId: true,
-          platformShopUrl: true,
           status: true,
           userId: true,
           createdAt: true,

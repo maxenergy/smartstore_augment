@@ -20,6 +20,7 @@ export interface GetProductsParams {
   minPrice?: number;
   maxPrice?: number;
   minRating?: number;
+  dropshippingSupported?: boolean;
   search?: string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
@@ -79,6 +80,7 @@ export class ProductService {
       minPrice,
       maxPrice,
       minRating,
+      dropshippingSupported,
       search,
       sortBy = "createdAt",
       sortOrder = "desc",
@@ -95,6 +97,7 @@ export class ProductService {
         price: { ...(minPrice !== undefined ? { gte: minPrice } : {}), lte: maxPrice },
       }),
       ...(minRating !== undefined && { rating: { gte: minRating } }),
+      ...(dropshippingSupported !== undefined && { dropshippingSupported }),
       ...(search && {
         OR: [
           { title: { contains: search, mode: "insensitive" } },

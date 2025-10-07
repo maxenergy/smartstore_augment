@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SyncService } from "@/services/sync.service";
 import { requireAuth } from "@/lib/auth-middleware";
-import { handleApiError } from "@/lib/error-handler";
+import { handleError } from "@/lib/error-handler";
 import { successResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/validate-request";
 import { batchSyncPriceSchema, type BatchSyncPriceInput } from "@/lib/validations/sync";
@@ -43,6 +43,6 @@ export async function POST(request: NextRequest) {
 
     return successResponse(result, "价格同步完成");
   } catch (err) {
-    return handleApiError(err);
+    return handleError(err);
   }
 }

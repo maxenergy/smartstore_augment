@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
       minPrice: queryParams.minPrice,
       maxPrice: queryParams.maxPrice,
       minRating: queryParams.minRating,
+      dropshippingSupported: queryParams.dropshippingSupported,
       search: queryParams.search,
       sortBy: queryParams.sortBy,
       sortOrder: queryParams.sortOrder,

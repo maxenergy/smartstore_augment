@@ -74,7 +74,7 @@ export default function NewProductPage() {
       };
 
       await createProduct.mutateAsync(payload);
-      router.push("/dashboard/products");
+      router.push("/products");
     } catch {
       setError("创建失败，请重试");
     }
@@ -84,7 +84,7 @@ export default function NewProductPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/dashboard/products">
+        <Link href="/products">
           <Button variant="outline" size="icon">
             <ArrowLeft className="h-4 w-4" />
           </Button>
@@ -245,7 +245,7 @@ export default function NewProductPage() {
                 <Button type="submit" disabled={createProduct.isPending}>
                   {createProduct.isPending ? "创建中..." : "创建产品"}
                 </Button>
-                <Link href="/dashboard/products">
+                <Link href="/products">
                   <Button type="button" variant="outline">
                     取消
                   </Button>

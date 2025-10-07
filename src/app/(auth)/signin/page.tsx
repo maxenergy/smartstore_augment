@@ -75,7 +75,7 @@ export default function SignInPage() {
         setError("邮箱或密码错误，请重试");
       } else if (result?.ok) {
         // 登录成功，跳转到仪表板
-        router.push("/dashboard");
+        router.push("/");
         router.refresh();
       }
     } catch {

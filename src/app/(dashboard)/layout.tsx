@@ -15,13 +15,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // 调试信息
+  useEffect(() => {
+    console.log("Dashboard Layout - Status:", status);
+    console.log("Dashboard Layout - Session:", session);
+  }, [status, session]);
+
   useEffect(() => {
     if (status === "unauthenticated") {
+      console.log("Redirecting to signin - unauthenticated");
       router.push("/signin");
     }
   }, [status, router]);
 
   if (status === "loading") {
+    console.log("Rendering loading state");
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
@@ -33,9 +41,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   if (!session) {
+    console.log("No session - returning null");
     return null;
   }
 
+  console.log("Rendering dashboard layout with session");
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Sidebar />

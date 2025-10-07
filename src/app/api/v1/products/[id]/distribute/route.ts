@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PlatformProductService } from "@/services/platform-product.service";
 import { requireAuth } from "@/lib/auth-middleware";
-import { handleApiError } from "@/lib/error-handler";
+import { handleError } from "@/lib/error-handler";
 import { successResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/validate-request";
 import {
@@ -68,6 +68,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     return successResponse(platformProduct, "产品分发成功", 201);
   } catch (err) {
-    return handleApiError(err);
+    return handleError(err);
   }
 }

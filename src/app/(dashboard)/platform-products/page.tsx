@@ -32,14 +32,14 @@ import { Package, Trash2 } from "lucide-react";
 
 export default function PlatformProductsPage() {
   const [page, setPage] = useState(1);
-  const [platform, setPlatform] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+  const [platform, setPlatform] = useState<string>("all");
+  const [status, setStatus] = useState<string>("all");
 
   const { data, isLoading, error } = usePlatformProducts({
     page,
     pageSize: 12,
-    platform: platform || undefined,
-    status: status || undefined,
+    platform: platform === "all" ? undefined : platform,
+    status: status === "all" ? undefined : status,
   });
 
   const updateInventory = useUpdateInventory();
@@ -106,7 +106,7 @@ export default function PlatformProductsPage() {
                 <SelectValue placeholder="平台" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部平台</SelectItem>
+                <SelectItem value="all">全部平台</SelectItem>
                 <SelectItem value="AMAZON">Amazon</SelectItem>
                 <SelectItem value="TIKTOK">TikTok</SelectItem>
                 <SelectItem value="SHOPIFY">Shopify</SelectItem>
@@ -119,7 +119,7 @@ export default function PlatformProductsPage() {
                 <SelectValue placeholder="状态" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部状态</SelectItem>
+                <SelectItem value="all">全部状态</SelectItem>
                 <SelectItem value="ACTIVE">活跃</SelectItem>
                 <SelectItem value="INACTIVE">停用</SelectItem>
               </SelectContent>

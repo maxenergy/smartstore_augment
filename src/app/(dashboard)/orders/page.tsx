@@ -22,15 +22,15 @@ import { Search, Eye } from "lucide-react";
 export default function OrdersPage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<string>("");
-  const [platform, setPlatform] = useState<string>("");
+  const [status, setStatus] = useState<string>("all");
+  const [platform, setPlatform] = useState<string>("all");
 
   const { data, isLoading, error } = useOrders({
     page,
     pageSize: 10,
     search: search || undefined,
-    status: status || undefined,
-    platform: platform || undefined,
+    status: status === "all" ? undefined : status,
+    platform: platform === "all" ? undefined : platform,
   });
 
   if (error) {
@@ -99,7 +99,7 @@ export default function OrdersPage() {
                 <SelectValue placeholder="状态" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部状态</SelectItem>
+                <SelectItem value="all">全部状态</SelectItem>
                 <SelectItem value="PENDING">待支付</SelectItem>
                 <SelectItem value="PAID">已支付</SelectItem>
                 <SelectItem value="PROCESSING">处理中</SelectItem>
@@ -115,7 +115,7 @@ export default function OrdersPage() {
                 <SelectValue placeholder="平台" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部平台</SelectItem>
+                <SelectItem value="all">全部平台</SelectItem>
                 <SelectItem value="AMAZON">Amazon</SelectItem>
                 <SelectItem value="TIKTOK">TikTok</SelectItem>
                 <SelectItem value="SHOPIFY">Shopify</SelectItem>
@@ -197,7 +197,7 @@ export default function OrdersPage() {
                       </div>
                     </div>
 
-                    <Link href={`/dashboard/orders/${order.id}`}>
+                    <Link href={`/orders/${order.id}`}>
                       <Button variant="outline" size="icon">
                         <Eye className="h-4 w-4" />
                       </Button>

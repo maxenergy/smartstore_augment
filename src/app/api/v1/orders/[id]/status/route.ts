@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { OrderService } from "@/services/order.service";
 import { requireAuth, requireOwnerOrAdmin } from "@/lib/auth-middleware";
-import { handleApiError } from "@/lib/error-handler";
+import { handleError } from "@/lib/error-handler";
 import { successResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/validate-request";
 import { updateOrderStatusSchema } from "@/lib/validations/order";
@@ -50,6 +50,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     return successResponse(updatedOrder, "订单状态更新成功");
   } catch (err) {
-    return handleApiError(err);
+    return handleError(err);
   }
 }

@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { OrderService } from "@/services/order.service";
 import { requireAuth } from "@/lib/auth-middleware";
-import { handleApiError } from "@/lib/error-handler";
+import { handleError } from "@/lib/error-handler";
 import { successResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/validate-request";
 import {
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
 
     return successResponse(result);
   } catch (err) {
-    return handleApiError(err);
+    return handleError(err);
   }
 }
 
@@ -114,6 +114,6 @@ export async function POST(request: NextRequest) {
 
     return successResponse(order, "订单创建成功", 201);
   } catch (err) {
-    return handleApiError(err);
+    return handleError(err);
   }
 }

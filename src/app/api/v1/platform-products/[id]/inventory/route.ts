@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PlatformProductService } from "@/services/platform-product.service";
 import { requireAuth } from "@/lib/auth-middleware";
-import { handleApiError } from "@/lib/error-handler";
+import { handleError } from "@/lib/error-handler";
 import { successResponse } from "@/lib/api-response";
 import { validateRequest } from "@/lib/validate-request";
 import { syncInventorySchema } from "@/lib/validations/platform-product";
@@ -49,6 +49,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     return successResponse(updatedPlatformProduct, "库存更新成功");
   } catch (err) {
-    return handleApiError(err);
+    return handleError(err);
   }
 }

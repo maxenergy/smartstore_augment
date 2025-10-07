@@ -94,8 +94,20 @@ export const authOptions: NextAuthOptions = {
 
   // 配置自定义页面
   pages: {
-    signIn: "/auth/login", // 自定义登录页面
-    error: "/auth/error", // 自定义错误页面
+    signIn: "/signin", // 自定义登录页面
+  },
+
+  // 配置 Cookie
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: false, // 开发环境使用 HTTP
+      },
+    },
   },
 
   // 配置回调函数

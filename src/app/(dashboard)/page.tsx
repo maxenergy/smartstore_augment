@@ -90,7 +90,7 @@ export default function DashboardPage() {
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <a
-              href="/dashboard/products/new"
+              href="/products/new"
               className="flex items-center gap-3 rounded-lg border border-gray-200 dark:border-gray-800 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <Package className="h-8 w-8 text-blue-600 dark:text-blue-400" />
@@ -101,7 +101,7 @@ export default function DashboardPage() {
             </a>
 
             <a
-              href="/dashboard/shops"
+              href="/shops"
               className="flex items-center gap-3 rounded-lg border border-gray-200 dark:border-gray-800 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <Store className="h-8 w-8 text-green-600 dark:text-green-400" />
@@ -112,7 +112,7 @@ export default function DashboardPage() {
             </a>
 
             <a
-              href="/dashboard/orders"
+              href="/orders"
               className="flex items-center gap-3 rounded-lg border border-gray-200 dark:border-gray-800 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <ShoppingCart className="h-8 w-8 text-purple-600 dark:text-purple-400" />

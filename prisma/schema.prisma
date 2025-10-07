@@ -142,14 +142,37 @@ model Product {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
+  // 一件代发相关字段
+  dropshippingSupported Boolean  @default(false) // 是否支持一件代发
+  supplierName          String? // 供应商名称
+  supplierUrl           String? // 供应商链接
+  supplierShopId        String? // 供应商店铺ID
+  costPrice             Float? // 成本价
+  suggestedRetailPrice  Float? // 建议零售价
+  profitMargin          Float? // 利润率（百分比）
+  minOrderQuantity      Int      @default(1) // 最小起订量
+  shippingTime          String? // 发货时效
+  shippingFrom          String? // 发货地
+  stockQuantity         Int? // 库存数量
+  stockSyncedAt         DateTime? // 库存同步时间
+
+  // 销售数据
+  salesCount Int @default(0) // 销量
+
+  // 搜索元数据
+  searchKeywords String? // 搜索关键词（用于记录）
+  importedAt     DateTime @default(now()) // 导入时间
+
   // 关系字段
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   platformProducts PlatformProduct[]
+  syncLogs         ProductSyncLog[]
 
   // 索引和约束
   @@unique([sourcePlatform, sourceProductId]) // 防止重复导入同一产品
   @@index([userId]) // 优化用户产品查询
   @@index([status]) // 优化状态筛选
+  @@index([dropshippingSupported]) // 优化一件代发筛选
   @@map("products")
 }
 
@@ -236,4 +259,27 @@ model SyncLog {
   @@index([status])
   @@index([syncedAt])
   @@map("sync_logs")
+}
+
+/// 产品同步日志表模型
+/// 记录产品数据同步的详细历史
+model ProductSyncLog {
+  id        String   @id @default(cuid())
+  productId String // 产品ID
+  syncType  String // 同步类型：PRICE, STOCK, INFO
+  platform  Platform // 平台
+  status    String // 同步状态：SUCCESS, FAILED
+  message   String? // 同步消息或错误信息
+  oldValue  String? // JSON格式的旧值
+  newValue  String? // JSON格式的新值
+  syncedAt  DateTime @default(now())
+
+  // 关系字段
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // 索引
+  @@index([productId])
+  @@index([platform])
+  @@index([syncedAt])
+  @@map("product_sync_logs")
 }

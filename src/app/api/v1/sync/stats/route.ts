@@ -6,7 +6,7 @@
 import { NextRequest } from "next/server";
 import { SyncService } from "@/services/sync.service";
 import { requireAuth } from "@/lib/auth-middleware";
-import { handleApiError } from "@/lib/error-handler";
+import { handleError } from "@/lib/error-handler";
 import { successResponse } from "@/lib/api-response";
 import { hasPermission } from "@/lib/permissions";
 
@@ -32,6 +32,6 @@ export async function GET(request: NextRequest) {
 
     return successResponse(stats);
   } catch (err) {
-    return handleApiError(err);
+    return handleError(err);
   }
 }

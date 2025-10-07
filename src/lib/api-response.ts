@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
+  message?: string;
   error?: {
     code: string;
     message: string;
@@ -37,22 +38,30 @@ export interface PaginatedResponse<T = unknown> {
 
 /**
  * 创建成功响应
+ * @param data 响应数据
+ * @param status HTTP 状态码
+ * @param message 可选的成功消息
+ * @param meta 可选的元数据
  */
 export function successResponse<T>(
   data: T,
-  status: number = 200,
+  status?: number,
+  message?: string,
   meta?: ApiResponse<T>["meta"]
 ): NextResponse<ApiResponse<T>> {
+  const httpStatus = status || 200;
+
   return NextResponse.json(
     {
       success: true,
       data,
+      ...(message && { message }),
       meta: {
         timestamp: new Date().toISOString(),
         ...meta,
       },
     },
-    { status }
+    { status: httpStatus }
   );
 }
 

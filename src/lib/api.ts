@@ -6,6 +6,9 @@
 import { apiClient } from "./api-client";
 import type { ApiResponse, PaginatedResponse } from "@/types/api";
 
+// 导出 apiClient 供其他模块使用
+export { apiClient };
+
 /**
  * 用户相关 API
  */

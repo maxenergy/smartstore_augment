@@ -20,14 +20,14 @@ import {
 } from "lucide-react";
 
 const navigation = [
-  { name: "仪表板", href: "/dashboard", icon: LayoutDashboard },
-  { name: "产品管理", href: "/dashboard/products", icon: Package },
-  { name: "店铺管理", href: "/dashboard/shops", icon: Store },
-  { name: "订单管理", href: "/dashboard/orders", icon: ShoppingCart },
-  { name: "平台产品", href: "/dashboard/platform-products", icon: Layers },
-  { name: "数据同步", href: "/dashboard/sync", icon: RefreshCw },
-  { name: "用户管理", href: "/dashboard/users", icon: Users },
-  { name: "设置", href: "/dashboard/settings", icon: Settings },
+  { name: "仪表板", href: "/", icon: LayoutDashboard },
+  { name: "产品管理", href: "/products", icon: Package },
+  { name: "店铺管理", href: "/shops", icon: Store },
+  { name: "订单管理", href: "/orders", icon: ShoppingCart },
+  { name: "平台产品", href: "/platform-products", icon: Layers },
+  { name: "数据同步", href: "/sync", icon: RefreshCw },
+  { name: "用户管理", href: "/users", icon: Users },
+  { name: "设置", href: "/settings", icon: Settings },
 ];
 
 export function Sidebar() {

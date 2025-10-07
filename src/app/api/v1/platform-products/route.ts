@@ -6,7 +6,7 @@
 import { NextRequest } from "next/server";
 import { PlatformProductService } from "@/services/platform-product.service";
 import { requireAuth } from "@/lib/auth-middleware";
-import { handleApiError } from "@/lib/error-handler";
+import { handleError } from "@/lib/error-handler";
 import { successResponse } from "@/lib/api-response";
 import { platformProductQuerySchema } from "@/lib/validations/platform-product";
 import { hasPermission } from "@/lib/permissions";
@@ -62,6 +62,6 @@ export async function GET(request: NextRequest) {
 
     return successResponse(result);
   } catch (err) {
-    return handleApiError(err);
+    return handleError(err);
   }
 }

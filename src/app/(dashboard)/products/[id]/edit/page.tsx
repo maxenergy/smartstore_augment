@@ -87,7 +87,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       };
 
       await updateProduct.mutateAsync({ id, data: payload });
-      router.push(`/dashboard/products/${id}`);
+      router.push(`/products/${id}`);
     } catch {
       setError("更新失败，请重试");
     }
@@ -104,7 +104,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link href={`/dashboard/products/${id}`}>
+        <Link href={`/products/${id}`}>
           <Button variant="outline" size="icon">
             <ArrowLeft className="h-4 w-4" />
           </Button>
@@ -224,7 +224,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 <Button type="submit" disabled={updateProduct.isPending}>
                   {updateProduct.isPending ? "保存中..." : "保存更改"}
                 </Button>
-                <Link href={`/dashboard/products/${id}`}>
+                <Link href={`/products/${id}`}>
                   <Button type="button" variant="outline">
                     取消
                   </Button>

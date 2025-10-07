@@ -21,10 +21,13 @@ export function useProducts(params?: {
   search?: string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
+  dropshippingSupported?: boolean;
 }) {
   return useQuery({
     queryKey: ["products", params],
     queryFn: () => productsApi.list(params),
+    staleTime: 5 * 60 * 1000, // 5 分钟内数据视为新鲜
+    gcTime: 10 * 60 * 1000, // 10 分钟后清除缓存
   });
 }
 
@@ -36,6 +39,8 @@ export function useProduct(id: string) {
     queryKey: ["products", id],
     queryFn: () => productsApi.get(id),
     enabled: !!id,
+    staleTime: 10 * 60 * 1000, // 10 分钟内数据视为新鲜
+    gcTime: 30 * 60 * 1000, // 30 分钟后清除缓存
   });
 }
 

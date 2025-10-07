@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     );
 
     // 返回成功响应
-    return successResponse(paginatedData, "获取用户列表成功");
+    return successResponse(paginatedData, 200, "获取用户列表成功");
   } catch (error) {
     return handleError(error);
   }

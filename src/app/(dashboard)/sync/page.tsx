@@ -19,15 +19,15 @@ import { RefreshCw, CheckCircle, XCircle, Clock } from "lucide-react";
 
 export default function SyncPage() {
   const [page, setPage] = useState(1);
-  const [syncType, setSyncType] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+  const [syncType, setSyncType] = useState<string>("all");
+  const [status, setStatus] = useState<string>("all");
 
   const { data: statsData, isLoading: statsLoading } = useSyncStats();
   const { data: logsData, isLoading: logsLoading } = useSyncLogs({
     page,
     pageSize: 10,
-    syncType: syncType || undefined,
-    status: status || undefined,
+    syncType: syncType === "all" ? undefined : syncType,
+    status: status === "all" ? undefined : status,
   });
 
   const stats = statsData?.data;
@@ -136,7 +136,7 @@ export default function SyncPage() {
                 <SelectValue placeholder="同步类型" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部类型</SelectItem>
+                <SelectItem value="all">全部类型</SelectItem>
                 <SelectItem value="INVENTORY">库存同步</SelectItem>
                 <SelectItem value="PRICE">价格同步</SelectItem>
                 <SelectItem value="ORDER">订单同步</SelectItem>
@@ -148,7 +148,7 @@ export default function SyncPage() {
                 <SelectValue placeholder="状态" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部状态</SelectItem>
+                <SelectItem value="all">全部状态</SelectItem>
                 <SelectItem value="SUCCESS">成功</SelectItem>
                 <SelectItem value="FAILED">失败</SelectItem>
                 <SelectItem value="PENDING">进行中</SelectItem>
